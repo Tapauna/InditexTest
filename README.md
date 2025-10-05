@@ -8,7 +8,7 @@ Hecho con java 17, Maven 3.9.9 y Spring Boot 3.5.6
 Para definir la Api he usado OpenApi Generator y para la implementacion de mapas MapStructs.
 Además de la propia aplicación, se añade a la arquitectura un nodo de Redis para cachear las llamadas al servicio externo, al igual que un proxy nginx para balancear la carga entre tres replicas de la aplicación.
 
-# Pasos para arrancarlo
+# Pasos para ejecutarlo
 
 - Primero es necesario crear el contenedor Docker que contendrá tanto la simulación del servicio externo como los tests. Para ello es necesario ejecutar docker compose en el proyecto de las pruebas https://github.com/dalogax/backendDevTest  
   ```docker-compose up -d simulado influxdb grafana```
