@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: inditexTest
+  external:
+    baseUrl: http://localhost:3001
+    similarProductsUrl: /product/{productId}/similarids
+    productDetailsUrl: /product/{productId}
+  data:
+    redis:
+      host: ${SPRING_REDIS_HOST:localhost}
+      port: ${SPRING_REDIS_PORT:6379}
+      timeout: 6000
