@@ -3,6 +3,8 @@ package com.inditex.inditexTest;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.Arrays;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openapitools.model.ProductDetail;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +13,32 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ActiveProfiles("test")
+@Testcontainers
 class InditexTestApplicationTests {
 
 	@Autowired
 	private TestRestTemplate restTemplate;
+
+
+	@Container
+	static GenericContainer<?> redis = new GenericContainer<>("redis:latest")
+			.withExposedPorts(6379);
+
+	@DynamicPropertySource
+	static void redisProps(DynamicPropertyRegistry r) {
+		r.add("spring.data.redis.host", redis::getHost);
+		r.add("spring.data.redis.port", () -> redis.getMappedPort(6379));
+	}
 
 	@Test
 	void getSimilarProductsOk(){
@@ -27,6 +46,7 @@ class InditexTestApplicationTests {
 		ResponseEntity<ProductDetail[]> response=restTemplate.getForEntity(uriBuilder.toUriString(),
 				ProductDetail[].class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
+		Assertions.assertNotNull(Arrays.stream(response.getBody()));
 	}
 
 
