@@ -12,7 +12,8 @@ Además de la propia aplicación, se añade a la arquitectura un nodo de Redis p
 
 - Primero es necesario crear el contenedor Docker que contendrá tanto la simulación del servicio externo como los tests. Para ello es necesario ejecutar docker compose en el proyecto de las pruebas https://github.com/dalogax/backendDevTest  
   ```docker-compose up -d simulado influxdb grafana```
-- Una vez creado el primer contenedor, debemos de ejecutar docker compose en nuestro proyecto. El contenedor contendrá las 3 replicas de la aplicación, el proxy para balancear la carga y Redis para cachear las llamadas al servicio.  
+- Una vez creado el primer contenedor, Tendremos que compilar nuestro proyecto, para ello hacemos maven install
+- Una vez generado el jar de nuestro proyecto, debemos de ejecutar docker compose. El contenedor contendrá las 3 replicas de la aplicación, el proxy para balancear la carga y Redis para cachear las llamadas al servicio.  
 ```docker-compose up```
 - Una vez levantado el servicio, podremos ejecutar el banco de pruebas implementado en el proyecto de las pruebas  
 ```docker-compose run --rm k6 run scripts/test.js```
